@@ -1,0 +1,30 @@
+.map {
+  width : 100%;
+  height : 100%;
+}
+.mapboxgl-ctrl {
+  display: none !important;
+}
+.mapboxgl-map {
+  position: absolute;
+  .mapboxgl-canvas-container {
+    height: 100%;
+    width: 100%;
+    .mapboxgl-canvas {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .mapboxgl-popup {
+    .mapboxgl-popup-tip {
+      border-top-color: #051937;
+      border-bottom-color: #051937;
+    }
+    .mapboxgl-popup-content {
+      padding: 0;
+      border-radius: 0;
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
