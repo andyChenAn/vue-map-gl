@@ -2,7 +2,7 @@
  * @author : andy
  * @description : 地图弹框组件
  */
-import { ComponentOptions, SetupContext, getCurrentInstance, h, inject, onBeforeUnmount, onMounted, ref, renderSlot, watchEffect } from 'vue';
+import { ComponentOptions, SetupContext, getCurrentInstance, h, inject, nextTick, onBeforeUnmount, onMounted, ref, renderSlot, watchEffect } from 'vue';
 import { PopupOptions , Popup as MapboxPopup } from 'mapbox-gl';
 import MapVue from '../core/map';
 import filter from '../utils/filter';
@@ -110,7 +110,9 @@ export const Popup: ComponentOptions = {
     });
 
     onMounted(() => {
-      createPopup();
+      setTimeout(() => {
+        createPopup();
+      } , 0)
     });
 
     onBeforeUnmount(() => {

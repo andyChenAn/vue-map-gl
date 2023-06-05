@@ -8,9 +8,24 @@ export default [
       ['!=', 'mode', 'static']
     ],
     'paint': {
-      'fill-color': '#3bb2d0',
-      'fill-outline-color': '#3bb2d0',
-      'fill-opacity': 0.1
+      'fill-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillColor'],
+        '#3bb2d0'
+      ],
+      'fill-outline-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOutlineColor'],
+        '#3bb2d0'
+      ],
+      'fill-opacity': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOpacity'],
+        0.1
+      ]
     }
   },
   {
@@ -18,9 +33,24 @@ export default [
     'type': 'fill',
     'filter': ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
     'paint': {
-      'fill-color': '#fbb03b',
-      'fill-outline-color': '#fbb03b',
-      'fill-opacity': 0.1
+      'fill-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillColor'],
+        'green'
+      ],
+      'fill-outline-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOutlineColor'],
+        'green'
+      ],
+      'fill-opacity': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOpacity'],
+        0.1
+      ]
     }
   },
   {
@@ -47,8 +77,18 @@ export default [
       'line-join': 'round'
     },
     'paint': {
-      'line-color': '#3bb2d0',
-      'line-width': 2
+      'line-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOutlineColor'],
+        '#3bb2d0'
+      ],
+      'line-width': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_lineWidth'],
+        2
+      ]
     }
   },
   {
@@ -60,9 +100,19 @@ export default [
       'line-join': 'round'
     },
     'paint': {
-      'line-color': '#fbb03b',
+      'line-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_fillOutlineColor'],
+        '#fbb03b'
+      ],
       'line-dasharray': [0.2, 2],
-      'line-width': 2
+      'line-width': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_lineWidth'],
+        2
+      ]
     }
   },
   {
@@ -81,10 +131,15 @@ export default [
       'line-color': [
         'case',
         ['==' , ['get' , 'user_custom'] , true],
-        ['get' , 'user_lineInactiveLineColor'],
+        ['get' , 'user_lineColor'],
         '#fbb03b'
       ],
-      'line-width': 2
+      'line-width': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_lineWidth'],
+        2
+      ]
     }
   },
   {
@@ -102,11 +157,16 @@ export default [
       'line-color': [
         'case',
         ['==' , ['get' , 'user_custom'] , true],
-        ['get' , 'user_lineActiveLineColor'],
+        ['get' , 'user_lineColor'],
         '#fbb03b'
       ],
       'line-dasharray': [0.2, 2],
-      'line-width': 2
+      'line-width': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_lineWidth'],
+        2
+      ]
     }
   },
   {
@@ -132,7 +192,12 @@ export default [
     ],
     'paint': {
       'circle-radius': 3,
-      'circle-color': '#fbb03b'
+      'circle-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleColor'],
+        '#fbb03b'
+      ]
     }
   },
   {
@@ -146,8 +211,18 @@ export default [
     ],
     'paint': {
       'circle-radius': 5,
-      'circle-opacity': 1,
-      'circle-color': '#fff'
+      'circle-opacity': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleOpacity'],
+        1
+      ],
+      'circle-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleColor'],
+        '#fff'
+      ]
     }
   },
   {
@@ -160,8 +235,18 @@ export default [
       ['!=', 'mode', 'static']
     ],
     'paint': {
-      'circle-radius': 3,
-      'circle-color': '#3bb2d0'
+      'circle-radius': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleRadius'],
+        3
+      ],
+      'circle-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleColor'],
+        '#3bb2d0'
+      ]
     }
   },
   {
@@ -173,8 +258,24 @@ export default [
       ['!=', 'meta', 'midpoint']
     ],
     'paint': {
-      'circle-radius': 7,
-      'circle-color': '#fff'
+      'circle-radius': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['+' , ['get' , 'user_circleRadius'] , 3],
+        5
+      ],
+      'circle-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleColor'],
+        '#fff'
+      ],
+      'circle-opacity' : [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleOpacity'],
+        0.2
+      ]
     }
   },
   {
@@ -185,8 +286,18 @@ export default [
       ['!=', 'meta', 'midpoint'],
       ['==', 'active', 'true']],
     'paint': {
-      'circle-radius': 5,
-      'circle-color': '#fbb03b'
+      'circle-radius': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleRadius'],
+        5
+      ],
+      'circle-color': [
+        'case',
+        ['==' , ['get' , 'user_custom'] , true],
+        ['get' , 'user_circleColor'],
+        '#3bb2d0'
+      ]
     }
   },
   {

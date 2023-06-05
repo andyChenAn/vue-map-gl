@@ -191,7 +191,6 @@ export const Source: ComponentOptions = {
     // 更新数据源
     const updateSource = (source: any , newProps: SourceProps , oldProps: SourceProps) => {
       const { type } = newProps;
-      console.log(23424)
       switch (type) {
         case 'geojson':
           (source as GeoJSONSource).setData((newProps as any).data);

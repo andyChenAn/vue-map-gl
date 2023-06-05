@@ -1,6 +1,8 @@
 import { Map } from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import theme from './theme';
+import CircleMode from './modes/CircleMode';
+import SimpleSelectMode from './modes/SimpleSelectMode';
 interface DrawOptions {
   create?: (evt: any) => void;
   update?: (evt: any) => void;
@@ -9,59 +11,30 @@ interface DrawOptions {
 }
 
 interface DrawStyle {
-  polygonFillInactiveColor?: string;
-  polygonFillInactiveOutLineColor?: string;
-  polygonFillInactiveOpacity?: number;
-
-  polygonFillActiveColor?: string;
-  polygonFillActiveOutLineColor?: string;
-  polygonFillActiveOpacity?: number;
-
-  polygonMidpointCircleColor?: string;
-  polygonMidpointCircleRadius?: number;
-
-  polygonStrokeInactiveLineColor?: string;
-  polygonStrokeInactiveLineWidth?: number;
-
-  polygonStrokeActiveLineColor?: string;
-  polygonStrokeActiveLineWidth?: number;
-
-  lineInactiveLineColor?: string;
-  lineInactiveLineWidth?: number;
-  lineActiveLineColor?: string;
-  lineActiveLineWidth?: number;
-
-  polygonAndLineVertexStrokeInactiveCircleRadius?: number;
-  polygonAndLineVertexStrokeInactiveCircleColor?: string;
-  polygonAndLineVertexInactiveCircleRadius?: number;
-  polygonAndLineVertexInactiveCircleColor?: string;
-
-  pointStrokeInactiveCircleRadius?: number;
-  pointStrokeInactiveCircleOpacity?: number;
-  opacityStrokeInactiveCircleColor?: string;
-
-  pointInactiveCircleRadius?: number;
-  pointInactiveCircleColor?: string;
-
-  pointStrokeActiveCircleRadius?: number;
-  pointStrokeActiveCircleColor?: string;
-
-  pointActiveCircleRadius?: number;
-  pointActiveCircleColor?: string;
-
-  polygonFillStaticFillColor?: string;
-  polygonFillStaticFillOutlineColor?: string;
-  polygonFillStaticFillOpacity?: number;
-
-  polygonStrokeStaticLineColor?: string;
-  polygonStrokeStaticLineWidth?: number;
-
-  lineStaticLineColor?: string;
-  lineStaticLineWidth?: number;
-
-  pointStaticCircleRadius?: number;
-  pointStaticCircleColor?: string;
+  // 面的填充色
+  fillColor?: string;
+  // 面的外面的那条线的颜色
+  fillOutlineColor?: string;
+  // 面的透明度
+  fillOpacity?: number;
+  // 线宽
+  lineWidth?: number;
+  // 线的填充色
+  lineColor?: string;
+  // 线的透明度
+  lineOpacity?: number;
+  // 顶点的填充色
+  vertexColor?: string;
+  // 顶点的半径
+  vertexRadius?: number;
+  // 圆圈(点)的颜色
+  circleColor?: string;
+  // 圆圈(点)的半径
+  circleRadius?: number;
+  // 圆圈(点)的透明度
+  circleOpacity?: number;
 }
+
 const noopEventHander = () => {}
 export default class Draw {
   private map: Map;
@@ -80,7 +53,11 @@ export default class Draw {
       defaultMode : "simple_select",
       userProperties : true,
       styles : theme,
-      ...MapboxDraw.modes
+      modes : {
+        ...MapboxDraw.modes,
+        draw_circle : CircleMode,
+        simple_select : SimpleSelectMode
+      },
     });
     this.bindDrawEvents();
     this.map.addControl(this.draw);
@@ -102,27 +79,52 @@ export default class Draw {
       }
     })
   }
-
-  drawLine (options: DrawOptions = {}) {
+  /**
+   * 设置标绘事件监听器
+   * @param options 选项
+   */
+  setDrawhandlers (options: DrawOptions = {}) {
     this.create = (evt: any) => {
+      // 当创建成功的时候更新样式
       if (evt.features.length > 0) {
         this.draw?.setFeatureProperty(evt.features[0].id , 'custom' , true);
         // 更新样式
-        this.updateLineStyle(evt.features[0].id , options.style!);
+        this.updateStyle(evt.features[0].id , options.style as DrawStyle);
       }
+      options.create = options.create || noopEventHander;
       options.create!(evt);      
     };
     this.update = options.update || noopEventHander;
     this.delete = options.delete || noopEventHander;
+  }
+  /**
+   * 画线
+   * @param options 选项
+   */
+  drawLine (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
     this.draw?.changeMode('draw_line_string');
   }
   /**
-   * 更新线的样式
+   * 更新标绘样式
    * @param featureId featureId
    * @param style 样式
    */
-  updateLineStyle (featureId: string , style: DrawStyle) {
-    this.draw?.setFeatureProperty(featureId , 'lineActiveLineColor' , style.lineActiveLineColor);
-    this.draw?.setFeatureProperty(featureId , 'lineInactiveLineColor' , style.lineInactiveLineColor);
+  updateStyle (featureId: string , style: DrawStyle) {
+    for (const name in style) {
+      this.draw?.setFeatureProperty(featureId , name , (style as any)[name]);
+    }
+  }
+  drawPolygon (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
+    this.draw?.changeMode('draw_polygon');
+  }
+  drawPoint (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
+    this.draw?.changeMode('draw_point');
+  }
+  drawCircle (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
+    this.draw?.changeMode('draw_circle');
   }
 };

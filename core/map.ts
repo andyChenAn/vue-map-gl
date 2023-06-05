@@ -5,6 +5,7 @@
 import { Map , Style , LngLatBoundsLike, LngLatLike, DragPanOptions, FitBoundsOptions, Projection, TransformRequestFunction, InteractiveOptions , Fog , TerrainSpecification, Light } from 'mapbox-gl';
 import equals from '../utils/equals';
 import Draw from '../draw';
+import 'mapbox-gl/dist/mapbox-gl.css';
 export interface MapProps {
   // mapbox所需的token
   accessToken?: string | undefined;
@@ -159,10 +160,6 @@ export default class MapVue {
     const { props } = this;
     // 创建mapbox实例
     const map: Map = new this._MapClass({...props , container , style : props.mapStyle});
-    // 设置鼠标手势
-    if (props.cursor) {
-      map.getCanvas().style.cursor = props.cursor;
-    }
     // 创建draw实例
     this.draw = new Draw(map);
     this._map = map;
