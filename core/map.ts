@@ -6,6 +6,7 @@ import { Map , Style , LngLatBoundsLike, LngLatLike, DragPanOptions, FitBoundsOp
 import equals from '../utils/equals';
 import Draw from '../draw';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import mapIcons from '../icons';
 export interface MapProps {
   // mapbox所需的token
   accessToken?: string | undefined;
@@ -166,8 +167,17 @@ export default class MapVue {
     MapVue.currentMap = this;
     // 设置fog，light，terrain
     this.setFogAndLightAndTerrain(props);
+    // 添加图标
+    this.addMapIcons();
     // 绑定地图事件
     this.bindMapEvents();
+  }
+  addMapIcons () {
+    const map = this._map;
+    mapIcons.map(async icon => {
+      const obj = icon(map!);
+      await this.addImage(obj.name , obj , {pixelRatio : 2} , false);
+    });
   }
   /**
    * 复用mapbox
@@ -405,23 +415,31 @@ export default class MapVue {
    * @param name 图片id
    * @param url 图片地址，可以url也可以是require('xxx')解析的图片
    * @param options 调用mapbox对象的addImage方法传入的options，可选
+   * @param isUrl 判断是否为url链接
    * @returns Promise对象
    */
-  addImage (name: string , url: any, options: object = {}) {
+  addImage (name: string , url: any, options: object = {} , isUrl: boolean = true) {
     const map = this._map;
     return new Promise((resolve , reject) => {
       if (!map) {
         throw new Error('地图还没有初始化完成');
       }
       if (!map.hasImage(name)) {
-        map.loadImage(url , (err , image) => {
-          if (err) {
-            reject(err);
-          } else {
-            map.addImage(name , image! , options);
-            resolve(true);
-          }
-        })
+        if (isUrl) {
+          // 如果是url图片链接，我们就先loadImage
+          map.loadImage(url , (err , image) => {
+            if (err) {
+              reject(err);
+            } else {
+              map.addImage(name , image! , options);
+              resolve(true);
+            }
+          })
+        } else {
+          // 如果url不是图片，是我们自己自定义的基于mapbox提供的接口生成的图片，那么直接调用addImage
+          map.addImage(name , url , options);
+          resolve(true);
+        }
       }
     })
   }

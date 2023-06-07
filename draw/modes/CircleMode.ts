@@ -104,7 +104,7 @@ const CircleMode: DrawCustomMode = {
   onClick (state: any , evt: any) {
     state.polygon.properties.center = [];
   },
-  toDisplayFeatures (state:{[key: string]: any;} = {} , geojson: GeoJSON.Feature , display) {
+  toDisplayFeatures (state:{[key: string]: any;} = {} , geojson: GeoJSON.Feature , display: any) {
     if (geojson.properties) {
       // 哪个是当前正在绘制的圆圈
       const active = geojson.properties.id === state.polygon.id ? 'true' : 'false';

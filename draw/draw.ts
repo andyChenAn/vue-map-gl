@@ -3,6 +3,10 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import theme from './theme';
 import CircleMode from './modes/CircleMode';
 import SimpleSelectMode from './modes/SimpleSelectMode';
+import DirectSelectMode from './modes/DirectSelectMode';
+import RectMode from './modes/RectMode';
+import ArrowMode from './modes/ArrowMode';
+import LineStringMode from './modes/LineStringMode';
 interface DrawOptions {
   create?: (evt: any) => void;
   update?: (evt: any) => void;
@@ -55,8 +59,12 @@ export default class Draw {
       styles : theme,
       modes : {
         ...MapboxDraw.modes,
+        simple_select : SimpleSelectMode,
+        direct_select : DirectSelectMode,
         draw_circle : CircleMode,
-        simple_select : SimpleSelectMode
+        draw_rect : RectMode,
+        draw_arrow : ArrowMode,
+        draw_line_string : LineStringMode
       },
     });
     this.bindDrawEvents();
@@ -64,16 +72,19 @@ export default class Draw {
   }
   bindDrawEvents () {
     this.map.on('draw.create' , (evt: any) => {
+      console.log('create')
       if (this.create && typeof this.create === 'function') {
         this.create(evt);
       }
     });
     this.map.on('draw.update' , (evt: any) => {
+      console.log('update')
       if (this.update && typeof this.update === 'function') {
         this.update(evt);
       }
     });
     this.map.on('draw.delete' , (evt: any) => {
+      console.log('delete')
       if (this.delete && typeof this.delete === 'function') {
         this.delete(evt);
       }
@@ -92,7 +103,7 @@ export default class Draw {
         this.updateStyle(evt.features[0].id , options.style as DrawStyle);
       }
       options.create = options.create || noopEventHander;
-      options.create!(evt);      
+      options.create!(evt);
     };
     this.update = options.update || noopEventHander;
     this.delete = options.delete || noopEventHander;
@@ -103,7 +114,7 @@ export default class Draw {
    */
   drawLine (options: DrawOptions = {}) {
     this.setDrawhandlers(options);
-    this.draw?.changeMode('draw_line_string');
+    this.draw?.changeMode('draw_line_string' , options as any);
   }
   /**
    * 更新标绘样式
@@ -126,5 +137,38 @@ export default class Draw {
   drawCircle (options: DrawOptions = {}) {
     this.setDrawhandlers(options);
     this.draw?.changeMode('draw_circle');
+  }
+  drawRect (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
+    this.draw?.changeMode('draw_rect');
+  }
+  drawArrow (options: DrawOptions = {}) {
+    this.setDrawhandlers(options);
+    this.draw?.changeMode('draw_arrow');
+  }
+  /**
+   * 测距
+   */
+  ranging (options: any = {}) {
+    this.drawLine({...options , ranging : true});
+  }
+  /**
+   * 删除选中的feature
+   */
+  deleteDraw () {
+    const selectedIds = this.draw?.getSelected().features.reduce((list , item) => {
+      list.push(item.id as string);
+      return list;
+    } , [] as string[]);
+    if (selectedIds!.length > 0) {
+      this.draw?.delete(selectedIds!);
+      this.map.fire("draw.delete");
+    }
+  }
+  /**
+   * 删除所有的feature
+   */
+  deleteAllDraw () {
+    this.draw?.deleteAll();
   }
 };
