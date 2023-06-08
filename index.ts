@@ -5,13 +5,17 @@ import { Layer , LayerProps } from './components/layer';
 import { ClusterLayer , ClusterLayerProps } from './components/clusterLayer';
 import { Marker , MarkerProps } from './components/marker';
 import { Popup , PopupProps } from './components/popup';
+import { PathLayerProps , PathLayer } from './components/pathLayer';
+import { TrackLayerProps , TrackLayer } from './components/trackLayer';
 export default Map;
 export {
   Source,
   Layer,
   ClusterLayer,
   Marker,
-  Popup
+  Popup,
+  PathLayer,
+  TrackLayer
 }
 export type {
   MapProps,
@@ -19,5 +23,7 @@ export type {
   LayerProps,
   ClusterLayerProps,
   MarkerProps,
-  PopupProps
+  PopupProps,
+  PathLayerProps,
+  TrackLayerProps
 }
