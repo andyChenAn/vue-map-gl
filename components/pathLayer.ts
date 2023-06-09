@@ -114,7 +114,8 @@ export const PathLayer: ComponentOptions = {
                   'symbol-placement' : 'line',
                   'symbol-spacing' : 20,
                   'icon-image' : 'arrow',
-                  'icon-size' : 0.5
+                  'icon-size' : 0.5,
+                  'icon-allow-overlap' : true
                 }
               }
             )

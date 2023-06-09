@@ -193,6 +193,7 @@ export const Source: ComponentOptions = {
       const { type } = newProps;
       switch (type) {
         case 'geojson':
+          // console.log((newProps as any).data);
           (source as GeoJSONSource).setData((newProps as any).data);
           break;
         case 'image':

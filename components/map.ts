@@ -11,6 +11,10 @@ const MapPropsValidators = {
   attributionControl : Boolean,
   bearing : Number,
   bearingSnap : Number,
+  fadeDuration : {
+    type : Number,
+    default : 0
+  },
   bounds : mapboxgl.LngLatBounds,
   boxZoom : {
     type : Boolean,
@@ -39,7 +43,6 @@ const MapPropsValidators = {
     default : true
   },
   hash : [String , Boolean],
-  fadeDuration : Number,
   failIfMajorPerformanceCaveat : Boolean,
   fitBoundsOptions : Object,
   interactive : {
