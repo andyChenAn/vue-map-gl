@@ -3,14 +3,14 @@
  * @description : 轨迹图层
  */
 import { ComponentOptions, Fragment, SetupContext , h, watchEffect , ref , watch, inject, renderSlot } from "vue";
-import { PathLayer } from './pathLayer';
-import { Layer } from './layer';
-import { Source } from './source';
+import { PathLayer } from '../pathLayer';
+import { Layer } from '../layer';
+import { Source } from '../source';
 import { LineString , Point } from "geojson";
-import { omit, values } from 'lodash-es';
+import { omit } from 'lodash-es';
 import { rhumbBearing , rhumbDestination , distance , point } from '@turf/turf';
 import TrackPanel from './TrackPanel.vue';
-import MapVue from "../core/map";
+import MapVue from "../../core/map";
 export interface TrackLayerProps {
   id?: string;
   geojson?: GeoJSON.FeatureCollection<LineString>;
@@ -161,6 +161,7 @@ export const TrackLayer: ComponentOptions = {
       update();
     } , {deep : true , flush : 'post'});
     return () => {
+      console.log(props.panel , 'asd')
       return h(Fragment , [
         h(PathLayer , omit(props , ['speed' , 'icon' , 'panel'])),
         showTrack.value && h(
@@ -217,7 +218,8 @@ export const TrackLayer: ComponentOptions = {
                 iconGeojson.value.geometry.coordinates = coord;
               } 
             },
-            progress : progress.value
+            progress : progress.value,
+            
           },
           () => slots.default && slots.default()
         )

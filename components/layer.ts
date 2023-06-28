@@ -123,7 +123,7 @@ export const Layer: ComponentOptions = {
       };
       if (evt.type === 'mouseleave' && !handler) {
         handler = (evt: any) => {
-          map.getCanvas().style.cursor = 'grab';
+          map.getCanvas().style.cursor = '';
         }
       }
       if (handler) {

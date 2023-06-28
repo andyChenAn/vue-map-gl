@@ -2,7 +2,7 @@
  * @author : andy
  * @description : 聚合图层组件
  */
-import { ref , ComponentOptions, SetupContext, h, Fragment, mergeProps } from 'vue';
+import { ComponentOptions, SetupContext, h, Fragment, mergeProps } from 'vue';
 import { Layer } from './layer';
 import filter from '../utils/filter';
 export interface ClusterLayerProps {

@@ -4,22 +4,22 @@
  -->
 <template>
   <Teleport to="body">
-    <div class="track-panel">
-      <div class="inner">
-        <slot>
-          <div class="slider-box">
-            <div class="slider">
-              <div ref="rail" class="slider-rail"></div>
-              <div :style="{width : progress + '%'}" class="slider-track"></div>
-              <div :style="{left : progress + '%'}" @mousedown="onMouseDown" class="slider-handle"></div>
+    <slot>
+      <div class="track-panel">
+        <div class="inner">
+            <div class="slider-box">
+              <div class="slider">
+                <div ref="rail" class="slider-rail"></div>
+                <div :style="{width : progress + '%'}" class="slider-track"></div>
+                <div :style="{left : progress + '%'}" @mousedown="onMouseDown" class="slider-handle"></div>
+              </div>
+              <div class="slider-btn">
+                <span @click="onPlay" class="btn">开始播放</span>
+              </div>
             </div>
-            <div class="slider-btn">
-              <span @click="onPlay" class="btn">开始播放</span>
-            </div>
-          </div>
-        </slot>
+        </div>
       </div>
-    </div>
+    </slot>
   </Teleport>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps({
   progress : {
     type : Number,
     default : 0
-  },
+  }
 });
 const isDrag = ref(false);
 const rail = ref();
@@ -44,9 +44,11 @@ watchEffect(() => {
 })
 const emits = defineEmits(['click' , 'progress']);
 onMounted(() => {
-  const rect = rail.value.getBoundingClientRect();
-  width = rect.width;
-  left = rect.left;
+  if (rail.value) {
+    const rect = rail.value.getBoundingClientRect();
+    width = rect.width;
+    left = rect.left;
+  }
 });
 
 const onMouseDown = (evt: any) => {

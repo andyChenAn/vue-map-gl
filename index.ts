@@ -6,7 +6,7 @@ import { ClusterLayer , ClusterLayerProps } from './components/clusterLayer';
 import { Marker , MarkerProps } from './components/marker';
 import { Popup , PopupProps } from './components/popup';
 import { PathLayerProps , PathLayer } from './components/pathLayer';
-import { TrackLayerProps , TrackLayer } from './components/trackLayer';
+import { TrackLayerProps , TrackLayer } from './components/track/trackLayer';
 export default Map;
 export {
   Source,

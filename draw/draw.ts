@@ -12,6 +12,7 @@ interface DrawOptions {
   update?: (evt: any) => void;
   delete?: (evt: any) => void;
   style?: DrawStyle;
+  ranging?: boolean;
 }
 
 interface DrawStyle {
@@ -106,7 +107,19 @@ export default class Draw {
       options.create!(evt);
     };
     this.update = options.update || noopEventHander;
-    this.delete = options.delete || noopEventHander;
+    this.delete = (evt: any) => {
+      if (options.ranging) {
+        // 如果是测距，当删除的时候，需要清除dom
+        const ranges = document.querySelectorAll(".range-text");
+        if (ranges && ranges.length > 0) {
+          ranges.forEach(dom => {
+            dom.parentNode?.removeChild(dom);
+          })
+        }
+      };
+      options.delete = options.delete || noopEventHander;
+      options.delete!(evt);
+    };
   }
   /**
    * 画线
@@ -170,5 +183,6 @@ export default class Draw {
    */
   deleteAllDraw () {
     this.draw?.deleteAll();
+    this.map.fire("draw.delete");
   }
 };

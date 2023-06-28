@@ -4,6 +4,7 @@
  */
 export function createRangingText (value: string) {
   const el = document.createElement("span");
+  el.classList.add("range-text");
   el.style.border = '1px solid #7a7a7a';
   el.style.fontSize = '12px';
   el.style.color = '#333';
@@ -16,6 +17,7 @@ export function createRangingText (value: string) {
 };
 export function createRangingPoint () {
   const el = document.createElement("span");
+  el.classList.add("range-text");
   el.style.width = '8px';
   el.style.height = '8px';
   el.style.borderRadius = '50%';
@@ -27,6 +29,7 @@ export function createRangingPoint () {
 };
 export function createRangingDeletePoint () {
   const el = document.createElement("span");
+  el.classList.add("range-text");
   el.style.height = '17px';
   el.style.fontSize = '12px';
   el.style.borderRadius = '4px';
