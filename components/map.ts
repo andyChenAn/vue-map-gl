@@ -175,12 +175,6 @@ export const Map: ComponentOptions = {
         if (!mapContext.value) {
           mapContext.value = new MapVue(mapboxgl.Map , filter(props) , containerRef.value)
         };
-        if (!props.canuse) {
-          if (props.reuse) {
-            // 复用
-            mapContext.value.recycle();
-          }
-        };
         nextTick(() => {
           if (mapContext.value) {
             mapContext.value.map?.resize();
@@ -189,8 +183,14 @@ export const Map: ComponentOptions = {
       }
     });
     onBeforeUnmount(() => {
+      // const { canuse , reuse } = props;
+      // if (!canuse && !reuse) {
+      //   mapContext.value?.destroy();
+      // }
       const { canuse , reuse } = props;
-      if (!canuse && !reuse) {
+      if (reuse) {
+        mapContext.value?.recycle();
+      } else if (!canuse && !reuse) {
         mapContext.value?.destroy();
       }
     })

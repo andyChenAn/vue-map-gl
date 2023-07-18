@@ -161,7 +161,6 @@ export const TrackLayer: ComponentOptions = {
       update();
     } , {deep : true , flush : 'post'});
     return () => {
-      console.log(props.panel , 'asd')
       return h(Fragment , [
         h(PathLayer , omit(props , ['speed' , 'icon' , 'panel'])),
         showTrack.value && h(

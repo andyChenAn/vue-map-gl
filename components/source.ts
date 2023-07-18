@@ -6,7 +6,6 @@ import {
   inject , 
   onBeforeUnmount , 
   ref , 
-  ComponentOptions, 
   SetupContext,
   Fragment,
   provide,
@@ -143,7 +142,7 @@ const SourcePropsValidators = {
   onAdd : Function,
   onRemove : Function
 }
-export const Source: ComponentOptions = {
+export const Source: any = {
   name : 'Source',
   props : SourcePropsValidators,
   setup (props: SourceProps , { slots }: SetupContext) {

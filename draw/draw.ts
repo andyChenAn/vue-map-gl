@@ -11,6 +11,7 @@ interface DrawOptions {
   create?: (evt: any) => void;
   update?: (evt: any) => void;
   delete?: (evt: any) => void;
+  selectionchange?: (evt: any) => void;
   style?: DrawStyle;
   ranging?: boolean;
 }
@@ -47,6 +48,7 @@ export default class Draw {
   create: (evt: any) => void = noopEventHander;
   update: (evt: any) => void = noopEventHander;
   delete: (evt: any) => void = noopEventHander;
+  selectionchange: (evt: any) => void = noopEventHander;
   callback: () => void = () => {};
   constructor (map: Map) {
     this.map = map;
@@ -89,7 +91,10 @@ export default class Draw {
       if (this.delete && typeof this.delete === 'function') {
         this.delete(evt);
       }
-    })
+    });
+    this.map.on('draw.selectionchange' , (evt: any) => {
+      this.selectionchange(evt);
+    });
   }
   /**
    * 设置标绘事件监听器
@@ -105,6 +110,11 @@ export default class Draw {
       }
       options.create = options.create || noopEventHander;
       options.create!(evt);
+      if (options.ranging) {
+        setTimeout(() => {
+          this.draw?.changeMode('simple_select');
+        }, 0);
+      }
     };
     this.update = options.update || noopEventHander;
     this.delete = (evt: any) => {
@@ -119,6 +129,12 @@ export default class Draw {
       };
       options.delete = options.delete || noopEventHander;
       options.delete!(evt);
+    };
+    this.selectionchange = (evt: any) => {
+      // 如果是测距，那么就不让它选中
+      if (options.ranging) {
+        this.draw?.changeMode('simple_select');
+      }
     };
   }
   /**

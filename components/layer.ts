@@ -225,10 +225,6 @@ export const Layer: ComponentOptions = {
         const map = mapContext.value.map;
         nextTick(() => {
           unbindLayerEvents(map! , newProps.value.id!);
-          const layer =  map?.getLayer(newProps.value.id!);
-          if (layer) {
-            map?.removeLayer(newProps.value.id!);
-          }
         })
       };
     });
